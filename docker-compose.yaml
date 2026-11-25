@@ -1,5 +1,6 @@
 # Overpass auto-hébergé (s4) — secours des instances publiques (overpass-api.de 502/504 fréquents).
 # Une instance par pays (l'image n'accepte qu'un extrait). Import initial : France ~2-4 h, Belgique ~15 min.
+# update_database a besoin de beaucoup de RAM à l import (Belgique : OOM à 4 Go le 25/11) — limites larges, s4 a 62 Go.
 # Mises à jour quotidiennes par les diffs Geofabrik. Aires générées (requêtes `(area:…)`).
 services:
   overpass-fr:
@@ -20,7 +21,7 @@ services:
     volumes:
       - overpass-fr-db:/db
     expose: ["80"]
-    mem_limit: 10g
+    mem_limit: 36g
   overpass-be:
     image: wiktorn/overpass-api:latest
     restart: unless-stopped
@@ -38,7 +39,7 @@ services:
     volumes:
       - overpass-be-db:/db
     expose: ["80"]
-    mem_limit: 4g
+    mem_limit: 12g
 volumes:
   overpass-fr-db:
   overpass-be-db:
