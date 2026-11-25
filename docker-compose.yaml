@@ -4,6 +4,7 @@
 # Mises à jour quotidiennes par les diffs Geofabrik. Aires générées (requêtes `(area:…)`).
 services:
   overpass-fr:
+    container_name: overpass-fr
     image: wiktorn/overpass-api:latest
     restart: unless-stopped
     environment:
@@ -23,6 +24,7 @@ services:
     expose: ["80"]
     mem_limit: 36g
   overpass-be:
+    container_name: overpass-be
     image: wiktorn/overpass-api:latest
     restart: unless-stopped
     environment:
@@ -41,6 +43,7 @@ services:
     expose: ["80"]
     mem_limit: 12g
   overpass-re:
+    container_name: overpass-re
     # La Réunion : hors de l'extrait Geofabrik « France » (les DOM sont des extraits séparés).
     image: wiktorn/overpass-api:latest
     restart: unless-stopped
