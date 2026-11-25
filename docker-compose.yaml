@@ -40,6 +40,26 @@ services:
       - overpass-be-db:/db
     expose: ["80"]
     mem_limit: 12g
+  overpass-re:
+    # La Réunion : hors de l'extrait Geofabrik « France » (les DOM sont des extraits séparés).
+    image: wiktorn/overpass-api:latest
+    restart: unless-stopped
+    environment:
+      - OVERPASS_META=no
+      - OVERPASS_MODE=init
+      - OVERPASS_PLANET_URL=https://download.geofabrik.de/europe/france/reunion-latest.osm.pbf
+      - OVERPASS_DIFF_URL=https://download.geofabrik.de/europe/france/reunion-updates/
+      - OVERPASS_RULES_LOAD=10
+      - OVERPASS_UPDATE_SLEEP=86400
+      - OVERPASS_USE_AREAS=true
+      - OVERPASS_MAX_TIMEOUT=180
+      - OVERPASS_RATE_LIMIT=10
+      - OVERPASS_PLANET_PREPROCESS=mv /db/planet.osm.bz2 /db/planet.osm.pbf && osmium cat -o /db/planet.osm.bz2 /db/planet.osm.pbf
+    volumes:
+      - overpass-re-db:/db
+    expose: ["80"]
+    mem_limit: 6g
 volumes:
   overpass-fr-db:
   overpass-be-db:
+  overpass-re-db:
