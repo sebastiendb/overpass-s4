@@ -1,0 +1,44 @@
+# Overpass auto-hébergé (s4) — secours des instances publiques (overpass-api.de 502/504 fréquents).
+# Une instance par pays (l'image n'accepte qu'un extrait). Import initial : France ~2-4 h, Belgique ~15 min.
+# Mises à jour quotidiennes par les diffs Geofabrik. Aires générées (requêtes `(area:…)`).
+services:
+  overpass-fr:
+    image: wiktorn/overpass-api:latest
+    restart: unless-stopped
+    environment:
+      - OVERPASS_META=no
+      - OVERPASS_MODE=init
+      - OVERPASS_PLANET_URL=https://download.geofabrik.de/europe/france-latest.osm.pbf
+      - OVERPASS_DIFF_URL=https://download.geofabrik.de/europe/france-updates/
+      - OVERPASS_RULES_LOAD=10
+      - OVERPASS_UPDATE_SLEEP=86400
+      - OVERPASS_USE_AREAS=true
+      - OVERPASS_MAX_TIMEOUT=180
+      - OVERPASS_RATE_LIMIT=10
+      - OVERPASS_SPACE=4000000000
+      - OVERPASS_PLANET_PREPROCESS=mv /db/planet.osm.bz2 /db/planet.osm.pbf && osmium cat -o /db/planet.osm.bz2 /db/planet.osm.pbf
+    volumes:
+      - overpass-fr-db:/db
+    expose: ["80"]
+    mem_limit: 10g
+  overpass-be:
+    image: wiktorn/overpass-api:latest
+    restart: unless-stopped
+    environment:
+      - OVERPASS_META=no
+      - OVERPASS_MODE=init
+      - OVERPASS_PLANET_URL=https://download.geofabrik.de/europe/belgium-latest.osm.pbf
+      - OVERPASS_DIFF_URL=https://download.geofabrik.de/europe/belgium-updates/
+      - OVERPASS_RULES_LOAD=10
+      - OVERPASS_UPDATE_SLEEP=86400
+      - OVERPASS_USE_AREAS=true
+      - OVERPASS_MAX_TIMEOUT=180
+      - OVERPASS_RATE_LIMIT=10
+      - OVERPASS_PLANET_PREPROCESS=mv /db/planet.osm.bz2 /db/planet.osm.pbf && osmium cat -o /db/planet.osm.bz2 /db/planet.osm.pbf
+    volumes:
+      - overpass-be-db:/db
+    expose: ["80"]
+    mem_limit: 4g
+volumes:
+  overpass-fr-db:
+  overpass-be-db:
